@@ -258,3 +258,14 @@ C:\Users\mrcad\Documents\Unity Dev\whovania\obj\Debug\Assembly-CSharp.csproj.Cor
 C:\Users\mrcad\Documents\Unity Dev\whovania\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\mrcad\Documents\Unity Dev\whovania\obj\Debug\Assembly-CSharp.dll
 C:\Users\mrcad\Documents\Unity Dev\whovania\obj\Debug\Assembly-CSharp.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.Timeline.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.VSCode.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.TextMeshPro.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\UnityEngine.UI.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.Timeline.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.CollabProxy.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.Rider.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.2D.Sprite.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.2D.Tilemap.Editor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.TextMeshPro.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\UnityEditor.UI.pdb

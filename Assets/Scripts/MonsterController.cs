@@ -78,4 +78,15 @@ public class MonsterController : MonoBehaviour
         rayDirection = rayDirection * -1;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("hit something");
+
+        if (collision.gameObject.tag == "activePlayer")
+        {
+            Debug.Log("hit active player");
+            GameController.Instance.DamagePlayer();
+        }
+    }
+
 }
