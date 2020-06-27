@@ -1,0 +1,39 @@
+Whovania
+
+Target Release date: Release by Christmas 2020
+
+The Master has captured you and imprisoned you in the Zone; a micro-universe, along with friends from your past. As the Doctor, you must rescue your friends and return the 6 captured planets, returning them to the Universe using each of your companions unique skills to solve puzzles, before finally confronting the Master on Gallifrey.
+
+6 planets, 1 final planet
+
+Earth		Weeping Angels		?
+Skaro		Daleks			Davros - Tank Boss
+Mondas		Cybermen		Cybercontroller
+Zygor		Zygons			Skarasen
+Polymos		Autons			Nestene Gestalt - 'Octopus' Boss
+Metebelis-3	Spiders			Spider Queen
+
+Gallifrey	Time Lords		The Master 
+
+Time Travel
+
+Each planet has 2 timezones that can be travelled to with the TARDIS. Here you can solve puzzles to reach previously unreachable areas, or to give you an an advantage when you return to the future.
+
+Companions
+
+There are 13 companions hidden across the 6 captured worlds. Each companion has a special ability which will come in use for specific tasks or puzzles as you adventure through the zones worlds. Choosing the right companion to accompany you before leaving the TARDIS is key.
+
+If a companion is injured in play, they will need to be 'rescued' by walking over them.
+
+Combat
+
+There's little direct combat against enemies in this game; instead you'll have to use your wits as the Doctor to find innovative ways to sneak, escape or overcome the various monsters inhabiting the 6 captured planets.
+
+Planets
+
+Each of the 6 worlds has a unique feel to it; from the cobbled backstreets of Earth's London, to the metallic corridors of Skaro's Dalek City. These worlds are open to explore, but their various paths may be blocked in true metroid style, requiring the assistance of a rescued companion or the wits of some clever puzzle solving to overcome them.
+
+Tardis
+
+The Tardis acts as the hub during the game, and is used to travel between the 6 worlds. During flight, the player will need to respond to a quick-time/symbol response mechanism to ensure it reaches its destination, otherwise it will return to its last known location.
+The Tardis itself holds the control room, where flight is initiated and the main door to the world beyond stands and a side room which contains all of the rescued companions. It's in here that companions can be swapped around.

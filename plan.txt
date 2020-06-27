@@ -1,0 +1,28 @@
+whovania
+
+time travel puzzle type/metroidvania
+
+"This is it, Doctor, finally, you meet your doom!" The Master has imprisoned the Doctor in 'the zone', a bubble Universe of his making, captured alongside some of the most fearsome species Time has seen. However he isn't alone; scattered throughout the zone are old allies and travelling companions of the Doctor, each with their own unique special ability and skill.
+Taking control of the Doctor and any companions you find, you must use their strengths to your advantage to explore each of the 9 trapped worlds, solving puzzles and finding a way back into the Universe before it's too late....
+
+The TARDIS is trapped in a void with 9 planets; each holding one of the Doctor's oldest enemies. He must navigate each world, using his army of companions
+and their unlocked abilities along the way
+
+- swap between doctor and companion to take control of 'dual play'
+- daleks, cybermen, weeping angels, 
+
+- new paths open based on the companion present as they have diff abilities
+- tardis 'flight' through space by responding to QTE style inputs on the keyboard and 'brain training' inspired play
+
+Roadmap
+
+- Basic input/movement
+- start menu
+- Savegame state
+	- store player pos
+	- store each obj pos in current world
+	- store each enemy pos in current world
+
+-----------------------
+
+Daleks, Cybermen, Angels, Zygons, Sontarans, Autons, Silurians, 
