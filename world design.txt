@@ -1,0 +1,21 @@
+TARDIS Synthesiser - use this object to craft one item into another
+
+BLAST - Ability to destroy certain doors or secret walls (River/Ace/Brigadier)
+
+Earth
+
+The Autons are invading; find the Nestene Conciousness, and put a stop to it!
+
+Climb the nearby building until you reach the roof where you'll find a Nestene Control Unit (Nestene Control Unit - can be converted into anti-plastic).
+
+Next head West, passing through town and the graveyard. Enter the woods and drop into the cave. Heading east inside the cave, dodge the bats and use the sonic screwdriver to open the crypt gate. Enter the crypt, dodge the weeping angels (theyll only move towards you whilst you're facing them) and rescue your first companion.
+
+Pull the lever and exit via the stairs back into the graveyard. Continue east, heading into the town. Open the manhole just before the bridge and drop into the sewers.
+
+Head West and enter the pumping room. Insert the Antiplastic. The pipes should start dripping green if theyre connected.
+
+Navigate through the sewers, redirecting the pipes so that they're flowing towards the central chamber, avoiding the Autons as you do so. 
+
+To enter the Boss Chamber, use your companions BLAST ability on the door, then hop across to the valves on the eastern wall, dodging the Nestene Gestalts tentacles. Release the valve to despatch the Gestalt, and head back to the TARDIS (all the autons have now been destroyed).
+
+--------------------

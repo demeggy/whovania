@@ -25,6 +25,11 @@ There are 13 companions hidden across the 6 captured worlds. Each companion has 
 
 If a companion is injured in play, they will need to be 'rescued' by walking over them.
 
+K9 			shoot walls
+River Song		shoot enemies
+Leela			wall-jump
+Adric			use terminals
+
 Combat
 
 There's little direct combat against enemies in this game; instead you'll have to use your wits as the Doctor to find innovative ways to sneak, escape or overcome the various monsters inhabiting the 6 captured planets.

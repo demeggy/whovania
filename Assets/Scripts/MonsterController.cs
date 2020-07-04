@@ -26,7 +26,6 @@ public class MonsterController : MonoBehaviour
         //flip the sprite to face the right direction on spawn
         if (startingDirection == new Vector2(1,0))
         {
-            Debug.Log(startingDirection);
             offset = 0.5f;
             //GetComponent<SpriteRenderer>().flipX = false;
         }

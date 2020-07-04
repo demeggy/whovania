@@ -21,8 +21,8 @@ public class GameController : MonoBehaviour
     private int livesRemaining = 13;
 
     //Character vars
-    public List<GameObject> rescued_players;
-    public List<GameObject> rescue_nodes;
+    public int rescued_players;
+    public GameObject rescue_node;
 
     //Camera vars
     private Camera mainCamera;
@@ -113,8 +113,8 @@ public class GameController : MonoBehaviour
         Jump();
         Interact();
 
-        //Manually switch Players if there is a companion present
-        if (Input.GetKeyDown(KeyCode.Q) && playersRemaining > 1)
+        //Manually switch Players if there is a companion present and they are not in the Tardis
+        if (Input.GetKeyDown(KeyCode.Q) && playersRemaining > 1 && world_current != world_tardis)
         {
             SwitchPlayer();
         }
@@ -135,8 +135,8 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            //Follow the current player around
-            mainCamera.transform.position = new Vector3(player_current.transform.position.x, player_current.transform.position.y,-10);
+            //Follow the current player around - disabled with regional code
+            //mainCamera.transform.position = new Vector3(player_current.transform.position.x, player_current.transform.position.y,-10);
         }
     }
 
@@ -168,6 +168,7 @@ public class GameController : MonoBehaviour
     {
 
         LayerMask Solid = LayerMask.GetMask("Solid");
+        LayerMask Platform = LayerMask.GetMask("Platform");
 
         RaycastHit2D groundDetected = Physics2D.Raycast(player_current.transform.position, Vector2.down, 0.5f, Solid);
         Debug.DrawRay(player_current.transform.position, Vector2.down * 0.5f, Color.green, 3);
@@ -194,6 +195,7 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             player_animator.SetBool("isSpecial", true);
+            //return the type of special ability from the playercontroller
         }
 
         if (Input.GetKeyUp(KeyCode.E))
@@ -211,15 +213,14 @@ public class GameController : MonoBehaviour
 
             if (colliders.Length > 0)
             {
-                // enemies within 1m of the player
                 foreach (Collider2D collider in colliders)
                 {
+                    //Pickup or activate a companion
                     if(collider.gameObject.tag == "inactivePlayer")
                     {
                         //Add the inactive player to the current game if they dont exist
                         if (playersRemaining == 1)
                         {
-                            Debug.Log(collider.gameObject.name + " has joined");
                             if(!player_a)
                             {
                                 player_a = collider.gameObject;
@@ -229,21 +230,28 @@ public class GameController : MonoBehaviour
                             {
                                 player_b = collider.gameObject;
                             }
+                            rescued_players += 1;
                             playersRemaining += 1;
+                            Debug.Log(collider.gameObject.name + " has joined (" + playersRemaining + " players");
                         }
                         else
                         {
-                            //If you already have a companion, they will head off to the TARDIS ready to be used later
-                            Debug.Log(collider.gameObject.name + " has been added to the Tardis");
-                            rescued_players.Add(collider.gameObject);
-                            collider.gameObject.transform.position = rescue_nodes[0].transform.position;
+                            if (player_b != collider.gameObject)
+                            {
+                                //If you already have a different companion, they will head off to the TARDIS ready to be used later
+                                Debug.Log(collider.gameObject.name + " has been added to the Tardis");
+                                rescued_players += 1;
+                                collider.gameObject.transform.position = new Vector2(rescue_node.transform.position.x + rescued_players, rescue_node.transform.position.y);
+                            }
                         }
                     }
 
-                    if (collider.gameObject.tag == "door")
+                    //Enter or exit the Tardis
+                    if (collider.gameObject.tag == "door" && player_current == player_a)
                     {
-
-                        ReturnToTardis();
+                        //player_current.transform.position = collider.gameObject.GetComponent<Teleporter>().Target.transform.position;
+                        Teleport(collider.gameObject.GetComponent<Teleporter>().Target, collider.gameObject.GetComponent<Teleporter>().door_direction.ToString());
+                        
                     }
                 }
             }
@@ -257,13 +265,25 @@ public class GameController : MonoBehaviour
         player_current.tag = "inactivePlayer";
 
         //Toggle the current controlling player around, ensuring the colliders are changed between trigger and solid
+
+        //Switch to Player B (Companion)
         if (player_current == player_a)
         {
             player_current = player_b;
+            player_a.GetComponent<Rigidbody2D>().gravityScale = 0;
+            player_b.GetComponent<Rigidbody2D>().gravityScale = 3;
+            player_a.GetComponent<BoxCollider2D>().isTrigger = true;
+            player_b.GetComponent<BoxCollider2D>().isTrigger = false;
         }
+
+        //Switch to Player A (Doctor)
         else
         {
             player_current = player_a;
+            player_a.GetComponent<Rigidbody2D>().gravityScale = 3;
+            player_b.GetComponent<Rigidbody2D>().gravityScale = 0;
+            player_a.GetComponent<BoxCollider2D>().isTrigger = false;
+            player_b.GetComponent<BoxCollider2D>().isTrigger = true;
         }
 
         //Move the camera to the other character
@@ -310,23 +330,58 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void ReturnToTardis()
+    void Teleport(GameObject teleport_node, string direction)
     {
+        //if moving into the Tardis
+        if(direction == "In")
+        {
+            //If player_b is present, move player_b to their relevant companion node and clear the active companion slot (player_b)
+            if (player_b)
+            {
+                player_b.transform.position = new Vector2(rescue_node.transform.position.x + rescued_players, rescue_node.transform.position.y);
+                rescued_players += 1;
+                player_b = null;
+            }
+
+            //Set playersRemaining to 1
+            playersRemaining = 1;
+        }
+        else
+        {
+            //move active companions to tardis exterior node
+            if (player_b)
+            {
+                player_b.transform.position = teleport_node.transform.position;
+            }
+        }
+
+        //move player to the related node position
+        player_current.transform.position = teleport_node.transform.position;
+
         //Disable current world layer
-        world_current.SetActive(false);
+        //world_current.SetActive(false);
         //Activate tardis world layer
-        world_tardis.SetActive(true);
-
-        //Move player_a to Int node
-
-        //Move player_b to their relevant companion node
-        //Clear player_b slot
-        //Set playersRemaining to 1
+        //world_tardis.SetActive(true);
     }
 
-        //UI Updates -------------------------------------------------------------------------------------------------------------
+    void Rescue()
+    {
+        //if player_b is null
 
-        void UpdateUI()
+            //player_b = gameObject;
+            //rescued += 1;
+
+        //else
+
+            //gameObject.transform.position = new Vector2(rescuenode.transform.position.x + rescued, rescuenode.transform.position.y)
+            //rescued += 1;
+
+        //endif
+    }
+
+    //UI Updates -------------------------------------------------------------------------------------------------------------
+
+    void UpdateUI()
     {
         livesUI.text = livesRemaining.ToString();
     }

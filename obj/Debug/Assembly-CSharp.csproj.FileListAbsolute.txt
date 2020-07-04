@@ -269,3 +269,7 @@ C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.2D.Sprite.Edito
 C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.2D.Tilemap.Editor.pdb
 C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Unity.TextMeshPro.pdb
 C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\UnityEditor.UI.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\Pathfinding.Ionic.Zip.Reduced.dll
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\AstarPathfindingProject.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\PackageToolsEditor.pdb
+C:\Users\mrcad\Documents\Unity Dev\whovania\Temp\bin\Debug\AstarPathfindingProjectEditor.pdb
