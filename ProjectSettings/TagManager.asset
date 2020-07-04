@@ -49,9 +49,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Decor
+    uniqueID: 2190102093
+    locked: 0
   - name: Interact
     uniqueID: 680528463
     locked: 0
   - name: Chars
     uniqueID: 4012184861
+    locked: 0
+  - name: World_FX
+    uniqueID: 847747095
     locked: 0

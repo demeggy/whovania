@@ -144,8 +144,9 @@ public class GameController : MonoBehaviour
 
     void Movement()
     {
-        float dirX = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        float dirX = Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime;
         player_rb.position = new Vector2(player_rb.position.x + dirX, player_rb.position.y);
+        //player_current.transform.Translate(player_current.transform.position.x + dirX, player_current.transform.position.y, player_current.transform.position.z);
 
         //Flip Sprite
         if (dirX < 0)
