@@ -61,3 +61,6 @@ TagManager:
   - name: World_FX
     uniqueID: 847747095
     locked: 0
+  - name: Foreground
+    uniqueID: 1405203815
+    locked: 0

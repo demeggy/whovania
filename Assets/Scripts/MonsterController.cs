@@ -5,7 +5,7 @@ using UnityEngine;
 public class MonsterController : MonoBehaviour
 {
 
-    public enum Monster_Type { dalek, cyberman, zygon }
+    public enum Monster_Type { dalek, cyberman, zygon, auton }
     public Monster_Type monster_type;
 
     public float speed;
