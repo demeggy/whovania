@@ -17,8 +17,13 @@ public class GameController : MonoBehaviour
     private Animator player_animator;
     private bool canJump = true;
     private int jumpCounter = 0;
+    private float dropDistance;
     private int playersRemaining = 1;
     private int livesRemaining = 13;
+
+    //Inventory vars
+    public List<GameObject> inventory;
+    public List<Image> inventorySlotUI;
 
     //Character vars
     public int rescued_players;
@@ -40,6 +45,11 @@ public class GameController : MonoBehaviour
 
     //UI vars
     public Text livesUI;
+    public List<Image> inventorySlotPauseUI;
+    public List<Text> inventoryName;
+    public List<Text> inventoryDesc;
+    public GameObject gameUI;
+    public GameObject pauseUI;
 
     public static GameController Instance { get; private set; }
 
@@ -111,7 +121,12 @@ public class GameController : MonoBehaviour
         Movement();
         UseAbility();
         Jump();
+        PlatformDrop();
         Interact();
+        PauseMenu();
+
+        //Debug Commands
+        DebugShortcuts();
 
         //Manually switch Players if there is a companion present and they are not in the Tardis
         if (Input.GetKeyDown(KeyCode.Q) && playersRemaining > 1 && world_current != world_tardis)
@@ -165,14 +180,36 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void PlatformDrop()
+    {
+        LayerMask Platform = LayerMask.GetMask("Platform");
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            RaycastHit2D platformDetected = Physics2D.Raycast(player_current.transform.position, Vector2.down, 0.5f, Platform);
+            //Debug.DrawRay(player_current.transform.position, Vector2.down * 0.5f, Color.blue, 3);
+
+            if (platformDetected)
+            {
+                player_current.transform.position = new Vector2(player_current.transform.position.x, player_current.transform.position.y - 1.5f);
+            }
+
+        }
+    }
+
     void Jump()
     {
 
         LayerMask Solid = LayerMask.GetMask("Solid");
-        LayerMask Platform = LayerMask.GetMask("Platform");
 
-        RaycastHit2D groundDetected = Physics2D.Raycast(player_current.transform.position, Vector2.down, 0.5f, Solid);
-        Debug.DrawRay(player_current.transform.position, Vector2.down * 0.5f, Color.green, 3);
+        int mask1 = 1 << LayerMask.NameToLayer("Solid");
+        int mask2 = 1 << LayerMask.NameToLayer("Platform");
+        int combinedMask = mask1 | mask2;
+
+        //grounded = Physics2D.Linecast(player.position, groundCheck.position, combinedMask);
+
+        RaycastHit2D groundDetected = Physics2D.Raycast(player_current.transform.position, Vector2.down, 0.5f, combinedMask);
+        //Debug.DrawRay(player_current.transform.position, Vector2.down * 0.5f, Color.green, 0.05f);
 
         if (groundDetected)
         {
@@ -253,6 +290,12 @@ public class GameController : MonoBehaviour
                         //player_current.transform.position = collider.gameObject.GetComponent<Teleporter>().Target.transform.position;
                         Teleport(collider.gameObject.GetComponent<Teleporter>().Target, collider.gameObject.GetComponent<Teleporter>().door_direction.ToString());
                         
+                    }
+
+                    //Pickup items
+                    if(collider.gameObject.tag == "pickup")
+                    {
+                        PickupItem(collider.gameObject);
                     }
                 }
             }
@@ -380,11 +423,69 @@ public class GameController : MonoBehaviour
         //endif
     }
 
+    void PickupItem(GameObject pickup)
+    {
+        //is there room?
+        if (inventory.Count < 3)
+        {
+            //get the next slot 
+
+            //add item to it
+            inventory.Add(pickup);
+            Debug.Log("picking " + pickup.GetComponent<Pickup>().pickup_name + " up");
+            pickup.SetActive(false);
+
+            //get pickups sprite
+            Sprite pickupSprite = pickup.GetComponent<SpriteRenderer>().sprite;
+
+            //add pickups sprite to the target slot
+            inventorySlotUI[inventory.Count - 1].color = new Color(1,1,1,1);
+            inventorySlotUI[inventory.Count -1].sprite = pickupSprite;
+        }
+
+    }
+
+    void PauseMenu()
+    {
+        //Toggle pause menu on and off
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            pauseUI.SetActive(!pauseUI.activeSelf);
+            gameUI.SetActive(!gameUI.activeSelf);
+
+            //Refresh the UI elements of the pause menu with the relevant text
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                inventorySlotPauseUI[i].sprite = inventory[i].GetComponent<SpriteRenderer>().sprite;
+                inventorySlotPauseUI[i].color = new Color(1, 1, 1, 1);
+                inventoryName[i].text = inventory[i].GetComponent<Pickup>().pickup_name;
+                inventoryDesc[i].text = inventory[i].GetComponent<Pickup>().pickup_description;
+            }
+        }
+    }
+
+    // Debug Shortcut keys only ------------------------------------------
+    void DebugShortcuts()
+    {
+
+        //Remove the last item from inventory
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if (inventory.Count > 0)
+            {
+                Debug.Log(inventory.Count);
+                inventory.RemoveAt(inventory.Count -1);
+                inventorySlotUI[inventory.Count].color = new Color(1, 1, 1, 0);
+                inventorySlotUI[inventory.Count].sprite = null;
+            }
+        }
+    }
+
     //UI Updates -------------------------------------------------------------------------------------------------------------
 
     void UpdateUI()
     {
         livesUI.text = livesRemaining.ToString();
-    }
 
+    }
 }

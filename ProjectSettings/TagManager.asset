@@ -9,6 +9,7 @@ TagManager:
   - inactivePlayer
   - door
   - playerB
+  - pickup
   layers:
   - Default
   - TransparentFX
