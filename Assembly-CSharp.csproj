@@ -67,6 +67,7 @@
     <Compile Include="Assets\Camera Regions\Scripts\Region.cs" />
     <Compile Include="Assets\Camera Regions\Scripts\RegionCamera.cs" />
     <Compile Include="Assets\Camera Regions\Scripts\RegionHandler.cs" />
+    <Compile Include="Assets\Scripts\Boss_Earth.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\MonsterController.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Assets\Scripts\PlayerSettings.cs" />
     <Compile Include="Assets\Scripts\Save.cs" />
     <Compile Include="Assets\Scripts\Teleporter.cs" />
+    <Compile Include="Assets\Scripts\UIController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/mrcad/Documents/Unity Dev/whovania/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

@@ -4,9 +4,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+
+    //Game vars
+    private bool gamePaused = false;
+
     //Player vars
     public GameObject player_current;
     public GameObject player_a;
@@ -43,14 +48,6 @@ public class GameController : MonoBehaviour
     public GameObject world_metebelis;
     public GameObject world_gallifrey;
 
-    //UI vars
-    public Text livesUI;
-    public List<Image> inventorySlotPauseUI;
-    public List<Text> inventoryName;
-    public List<Text> inventoryDesc;
-    public GameObject gameUI;
-    public GameObject pauseUI;
-
     public static GameController Instance { get; private set; }
 
     //Create Singleton for referencing script
@@ -67,6 +64,7 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
         }
 
+        gamePaused = false;
         player_rb = player_current.gameObject.GetComponent<Rigidbody2D>();
         player_animator = player_current.gameObject.GetComponent<Animator>();
         mainCamera = Camera.main;
@@ -114,15 +112,16 @@ public class GameController : MonoBehaviour
     //Runtime
     private void Update()
     {
-        //UI Updates
-        UpdateUI();
-
-        //Player Inputs
-        Movement();
-        UseAbility();
-        Jump();
-        PlatformDrop();
-        Interact();
+        //Player Inputs only function if the game is not paused
+        if (gamePaused)
+        {
+            Movement();
+            UseAbility();
+            Jump();
+            PlatformDrop();
+            Interact();
+        }
+        
         PauseMenu();
 
         //Debug Commands
@@ -450,17 +449,26 @@ public class GameController : MonoBehaviour
         //Toggle pause menu on and off
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            pauseUI.SetActive(!pauseUI.activeSelf);
-            gameUI.SetActive(!gameUI.activeSelf);
+            gamePaused = !gamePaused;
+            //pauseUI.SetActive(!pauseUI.activeSelf);
+            //gameUI.SetActive(!gameUI.activeSelf);
 
-            //Refresh the UI elements of the pause menu with the relevant text
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                inventorySlotPauseUI[i].sprite = inventory[i].GetComponent<SpriteRenderer>().sprite;
-                inventorySlotPauseUI[i].color = new Color(1, 1, 1, 1);
-                inventoryName[i].text = inventory[i].GetComponent<Pickup>().pickup_name;
-                inventoryDesc[i].text = inventory[i].GetComponent<Pickup>().pickup_description;
-            }
+            ////Refresh the UI elements of the pause menu with the relevant text
+            //for (int i = 0; i < inventory.Count; i++)
+            //{
+            //    inventorySlotPauseUI[i].sprite = inventory[i].GetComponent<SpriteRenderer>().sprite;
+            //    inventorySlotPauseUI[i].color = new Color(1, 1, 1, 1);
+            //    inventoryName[i].text = inventory[i].GetComponent<Pickup>().pickup_name;
+            //    inventoryDesc[i].text = inventory[i].GetComponent<Pickup>().pickup_description;
+            //}
+        }
+
+        //Navigate the Pause Menu
+        if (gamePaused)
+        {
+            //float menuSelect = Input.GetAxisRaw("Vertical");
+
+
         }
     }
 
@@ -481,11 +489,4 @@ public class GameController : MonoBehaviour
         }
     }
 
-    //UI Updates -------------------------------------------------------------------------------------------------------------
-
-    void UpdateUI()
-    {
-        livesUI.text = livesRemaining.ToString();
-
-    }
 }
