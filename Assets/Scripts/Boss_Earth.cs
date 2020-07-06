@@ -29,7 +29,6 @@ public class Boss_Earth : MonoBehaviour
     {
         var dir = player.position - eye.transform.position;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Debug.Log(angle);
     }
 
     void SpinArms()

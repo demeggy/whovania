@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
 {
 
     //Game vars
-    private bool gamePaused = false;
+    private bool inventoryOpen = false;
 
     //Player vars
     public GameObject player_current;
@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour
 
     //Inventory vars
     public List<GameObject> inventory;
-    public List<Image> inventorySlotUI;
+    private int itemSelected;
 
     //Character vars
     public int rescued_players;
@@ -48,6 +48,13 @@ public class GameController : MonoBehaviour
     public GameObject world_metebelis;
     public GameObject world_gallifrey;
 
+    //UI vars
+    public Text inventoryName;
+    public Text inventoryDesc;
+    public Image inventorySelector;
+    public List<Image> inventorySlotUI;
+    public GameObject inventoryUI;
+
     public static GameController Instance { get; private set; }
 
     //Create Singleton for referencing script
@@ -64,10 +71,12 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        gamePaused = false;
+        inventoryOpen = false;
         player_rb = player_current.gameObject.GetComponent<Rigidbody2D>();
         player_animator = player_current.gameObject.GetComponent<Animator>();
         mainCamera = Camera.main;
+
+        
     }
 
     //Create a new save file
@@ -113,7 +122,7 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         //Player Inputs only function if the game is not paused
-        if (gamePaused)
+        if (!inventoryOpen)
         {
             Movement();
             UseAbility();
@@ -121,8 +130,8 @@ public class GameController : MonoBehaviour
             PlatformDrop();
             Interact();
         }
-        
-        PauseMenu();
+
+        OpenInventory();
 
         //Debug Commands
         DebugShortcuts();
@@ -424,51 +433,95 @@ public class GameController : MonoBehaviour
 
     void PickupItem(GameObject pickup)
     {
-        //is there room?
-        if (inventory.Count < 3)
+        for (int i = 0; i < inventory.Count; i++)
         {
-            //get the next slot 
+            if(inventory[i] == null)
+            {
+                inventory[i] = pickup;
+                Debug.Log("picking " + pickup.GetComponent<Pickup>().pickup_name + " up");
+                pickup.SetActive(false);
 
-            //add item to it
-            inventory.Add(pickup);
-            Debug.Log("picking " + pickup.GetComponent<Pickup>().pickup_name + " up");
-            pickup.SetActive(false);
+                //get pickups sprite
+                Sprite pickupSprite = pickup.GetComponent<SpriteRenderer>().sprite;
 
-            //get pickups sprite
-            Sprite pickupSprite = pickup.GetComponent<SpriteRenderer>().sprite;
-
-            //add pickups sprite to the target slot
-            inventorySlotUI[inventory.Count - 1].color = new Color(1,1,1,1);
-            inventorySlotUI[inventory.Count -1].sprite = pickupSprite;
+                //add pickups sprite to the target slot
+                inventorySlotUI[i].color = new Color(1, 1, 1, 1);
+                inventorySlotUI[i].sprite = pickupSprite;
+            break;
+            }
         }
-
     }
 
-    void PauseMenu()
+    void OpenInventory()
     {
         //Toggle pause menu on and off
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            gamePaused = !gamePaused;
-            //pauseUI.SetActive(!pauseUI.activeSelf);
-            //gameUI.SetActive(!gameUI.activeSelf);
+            inventoryOpen = !inventoryOpen;
+            inventoryUI.SetActive(!inventoryUI.activeSelf);
 
-            ////Refresh the UI elements of the pause menu with the relevant text
-            //for (int i = 0; i < inventory.Count; i++)
-            //{
-            //    inventorySlotPauseUI[i].sprite = inventory[i].GetComponent<SpriteRenderer>().sprite;
-            //    inventorySlotPauseUI[i].color = new Color(1, 1, 1, 1);
-            //    inventoryName[i].text = inventory[i].GetComponent<Pickup>().pickup_name;
-            //    inventoryDesc[i].text = inventory[i].GetComponent<Pickup>().pickup_description;
-            //}
+            //Reset Inventory selection
+            itemSelected = 0;
+            inventorySelector.transform.position = inventorySlotUI[0].transform.position;
         }
 
         //Navigate the Pause Menu
-        if (gamePaused)
+        if (inventoryOpen)
         {
-            //float menuSelect = Input.GetAxisRaw("Vertical");
+            float menuSelect = Input.GetAxisRaw("Horizontal");
 
+            //select right
+            if(menuSelect == 1 && itemSelected < 2)
+            {
+                itemSelected += 1;               
+            }
+            else if (menuSelect == -1 && itemSelected > 0)
+            {
+                itemSelected -= 1;
+            }
 
+            //move the selector to the transform of the next invslot
+            inventorySelector.transform.position = inventorySlotUI[itemSelected].transform.position;
+            //return the name and description of index [i] from inventory
+            if(inventory.Count > 0)
+            {
+                if(itemSelected < inventory.Count)
+                {
+                    if (inventory[itemSelected] != null)
+                    {
+                        inventoryName.text = inventory[itemSelected].GetComponent<Pickup>().pickup_name;
+                        inventoryDesc.text = inventory[itemSelected].GetComponent<Pickup>().pickup_description;
+                    }
+                    else
+                    {
+                        inventoryName.text = "";
+                        inventoryDesc.text = "";
+                    }
+                }
+                
+            }
+
+            //Drop Selected Item
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                //move the item to position
+                if (inventory[itemSelected] != null)
+                {
+                    inventory[itemSelected].transform.position = player_current.transform.position;
+                    inventory[itemSelected].SetActive(true);
+                    //remove the item from the list
+                    inventory[itemSelected] = null;
+                    //remove from UI
+                    inventorySlotUI[itemSelected].color = new Color(1, 1, 1, 0);
+                    inventorySlotUI[itemSelected].sprite = null;
+                }
+            }
+
+            //Use Selected Item
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+
+            }
         }
     }
 
