@@ -69,6 +69,7 @@
     <Compile Include="Assets\Camera Regions\Scripts\RegionHandler.cs" />
     <Compile Include="Assets\Scripts\Boss_Earth.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\InteractiveObject.cs" />
     <Compile Include="Assets\Scripts\MonsterController.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />

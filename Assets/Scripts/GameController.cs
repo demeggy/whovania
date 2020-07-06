@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour
 
     //Inventory vars
     public List<GameObject> inventory;
-    private int itemSelected;
+    private int itemIndex;
 
     //Character vars
     public int rescued_players;
@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
         player_animator = player_current.gameObject.GetComponent<Animator>();
         mainCamera = Camera.main;
 
-        
+
     }
 
     //Create a new save file
@@ -262,12 +262,12 @@ public class GameController : MonoBehaviour
                 foreach (Collider2D collider in colliders)
                 {
                     //Pickup or activate a companion
-                    if(collider.gameObject.tag == "inactivePlayer")
+                    if (collider.gameObject.tag == "inactivePlayer")
                     {
                         //Add the inactive player to the current game if they dont exist
                         if (playersRemaining == 1)
                         {
-                            if(!player_a)
+                            if (!player_a)
                             {
                                 player_a = collider.gameObject;
                             }
@@ -297,13 +297,20 @@ public class GameController : MonoBehaviour
                     {
                         //player_current.transform.position = collider.gameObject.GetComponent<Teleporter>().Target.transform.position;
                         Teleport(collider.gameObject.GetComponent<Teleporter>().Target, collider.gameObject.GetComponent<Teleporter>().door_direction.ToString());
-                        
+
                     }
 
                     //Pickup items
-                    if(collider.gameObject.tag == "pickup")
+                    if (collider.gameObject.tag == "pickup")
                     {
                         PickupItem(collider.gameObject);
+                    }
+
+                    //Examine interactive items
+                    if (collider.gameObject.tag == "interactive")
+                    {
+                        //return text from item description
+                        Debug.Log(collider.gameObject.GetComponent<InteractiveObject>().interaction_text);
                     }
                 }
             }
@@ -351,7 +358,7 @@ public class GameController : MonoBehaviour
 
         //set the new player as activePlayer tag
         player_current.tag = "activePlayer";
-   
+
     }
 
     public void DamagePlayer()
@@ -374,10 +381,10 @@ public class GameController : MonoBehaviour
         else
         {
             //Regenerate Doctor
-            if(player_current != player_a)
+            if (player_current != player_a)
             {
                 SwitchPlayer();
-            }            
+            }
             livesRemaining -= 1;
         }
     }
@@ -385,7 +392,7 @@ public class GameController : MonoBehaviour
     void Teleport(GameObject teleport_node, string direction)
     {
         //if moving into the Tardis
-        if(direction == "In")
+        if (direction == "In")
         {
             //If player_b is present, move player_b to their relevant companion node and clear the active companion slot (player_b)
             if (player_b)
@@ -420,13 +427,13 @@ public class GameController : MonoBehaviour
     {
         //if player_b is null
 
-            //player_b = gameObject;
-            //rescued += 1;
+        //player_b = gameObject;
+        //rescued += 1;
 
         //else
 
-            //gameObject.transform.position = new Vector2(rescuenode.transform.position.x + rescued, rescuenode.transform.position.y)
-            //rescued += 1;
+        //gameObject.transform.position = new Vector2(rescuenode.transform.position.x + rescued, rescuenode.transform.position.y)
+        //rescued += 1;
 
         //endif
     }
@@ -435,7 +442,7 @@ public class GameController : MonoBehaviour
     {
         for (int i = 0; i < inventory.Count; i++)
         {
-            if(inventory[i] == null)
+            if (inventory[i] == null)
             {
                 inventory[i] = pickup;
                 Debug.Log("picking " + pickup.GetComponent<Pickup>().pickup_name + " up");
@@ -447,50 +454,55 @@ public class GameController : MonoBehaviour
                 //add pickups sprite to the target slot
                 inventorySlotUI[i].color = new Color(1, 1, 1, 1);
                 inventorySlotUI[i].sprite = pickupSprite;
-            break;
+                break;
             }
         }
     }
 
     void OpenInventory()
     {
-        //Toggle pause menu on and off
+        //Toggle inventory menu on and off
         if (Input.GetKeyDown(KeyCode.Return))
         {
             inventoryOpen = !inventoryOpen;
             inventoryUI.SetActive(!inventoryUI.activeSelf);
 
             //Reset Inventory selection
-            itemSelected = 0;
+            itemIndex = 0;
             inventorySelector.transform.position = inventorySlotUI[0].transform.position;
         }
 
-        //Navigate the Pause Menu
+        NavigateInventory();
+    }
+
+    void NavigateInventory()
+    {
+        //Navigate the Inventory Menu
         if (inventoryOpen)
         {
             float menuSelect = Input.GetAxisRaw("Horizontal");
 
             //select right
-            if(menuSelect == 1 && itemSelected < 2)
+            if (menuSelect == 1 && itemIndex < 2)
             {
-                itemSelected += 1;               
+                itemIndex += 1;
             }
-            else if (menuSelect == -1 && itemSelected > 0)
+            else if (menuSelect == -1 && itemIndex > 0)
             {
-                itemSelected -= 1;
+                itemIndex -= 1;
             }
 
             //move the selector to the transform of the next invslot
-            inventorySelector.transform.position = inventorySlotUI[itemSelected].transform.position;
+            inventorySelector.transform.position = inventorySlotUI[itemIndex].transform.position;
             //return the name and description of index [i] from inventory
-            if(inventory.Count > 0)
+            if (inventory.Count > 0)
             {
-                if(itemSelected < inventory.Count)
+                if (itemIndex < inventory.Count)
                 {
-                    if (inventory[itemSelected] != null)
+                    if (inventory[itemIndex] != null)
                     {
-                        inventoryName.text = inventory[itemSelected].GetComponent<Pickup>().pickup_name;
-                        inventoryDesc.text = inventory[itemSelected].GetComponent<Pickup>().pickup_description;
+                        inventoryName.text = inventory[itemIndex].GetComponent<Pickup>().pickup_name;
+                        inventoryDesc.text = inventory[itemIndex].GetComponent<Pickup>().pickup_description;
                     }
                     else
                     {
@@ -498,31 +510,68 @@ public class GameController : MonoBehaviour
                         inventoryDesc.text = "";
                     }
                 }
-                
+
             }
 
             //Drop Selected Item
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                //move the item to position
-                if (inventory[itemSelected] != null)
-                {
-                    inventory[itemSelected].transform.position = player_current.transform.position;
-                    inventory[itemSelected].SetActive(true);
-                    //remove the item from the list
-                    inventory[itemSelected] = null;
-                    //remove from UI
-                    inventorySlotUI[itemSelected].color = new Color(1, 1, 1, 0);
-                    inventorySlotUI[itemSelected].sprite = null;
-                }
+                DropItem(itemIndex);
             }
 
             //Use Selected Item
             if (Input.GetKeyDown(KeyCode.E))
             {
-
+                UseItem(itemIndex);
             }
         }
+    }
+
+    void UseItem(int itemIndex)
+    {
+        //unpause
+        //hit for interactive objects
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(player_current.transform.position, 1f);
+
+        if (colliders.Length > 0)
+        {
+            foreach (Collider2D collider in colliders)
+            {
+                GameObject obj = collider.gameObject;
+                Debug.Log(obj.name);
+
+                //call UseItemOn on all interactive objects returned
+                if (obj.tag == "interactive")
+                {
+                    //pass the current selected item into the target objects script
+                    obj.GetComponent<InteractiveObject>().UseItemOn(inventory[itemIndex], itemIndex);
+                }
+            }
+        }
+    }
+
+    public void DropItem(int itemIndex)
+    {
+        //move the item to position
+        if (inventory[itemIndex] != null)
+        {
+            inventory[itemIndex].transform.position = player_current.transform.position;
+            inventory[itemIndex].SetActive(true);
+            //remove the item from the list
+            inventory[itemIndex] = null;
+            //remove from UI
+            inventorySlotUI[itemIndex].color = new Color(1, 1, 1, 0);
+            inventorySlotUI[itemIndex].sprite = null;
+        }
+    }
+
+    public void DestroyItem(int itemIndex)
+    {
+        //remove the item from the list
+        inventory[itemIndex] = null;
+        //remove from UI
+        inventorySlotUI[itemIndex].color = new Color(1, 1, 1, 0);
+        inventorySlotUI[itemIndex].sprite = null;
     }
 
     // Debug Shortcut keys only ------------------------------------------

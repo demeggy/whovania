@@ -10,6 +10,7 @@ TagManager:
   - door
   - playerB
   - pickup
+  - interactive
   layers:
   - Default
   - TransparentFX
