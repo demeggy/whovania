@@ -19005,6 +19005,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &487712127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 487712128}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &487712128
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487712127}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &488145714
 GameObject:
   m_ObjectHideFlags: 0
@@ -21317,10 +21347,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction_type: 2
-  interaction_text: A freshly dug grave, the tombstone is marked with writing... "Hello,
-    Sweety"?
+  interaction_text: How spooky... a freshly dug grave...
   activator_key: {fileID: 1459720013}
-  activator_targets: []
+  activator_targets:
+  - {fileID: 756622740}
 --- !u!61 &980050292
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -25231,6 +25261,12 @@ Transform:
   m_Father: {fileID: 1830310956}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1295628300 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7903288775666180257, guid: 93659a9354bf9af459e653a201c23997,
+    type: 3}
+  m_PrefabInstance: {fileID: 3053563136548392871}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1299550732
 GameObject:
   m_ObjectHideFlags: 0
@@ -27040,6 +27076,10 @@ MonoBehaviour:
   world_polymos: {fileID: 0}
   world_metebelis: {fileID: 0}
   world_gallifrey: {fileID: 0}
+  interactionUI: {fileID: 1295628300}
+  interactionText: {fileID: 1706231303}
+  dialogueDelay: 0.05
+  fullText: 
   inventoryName: {fileID: 2076121921}
   inventoryDesc: {fileID: 1479716392}
   inventorySelector: {fileID: 163665073}
@@ -29075,9 +29115,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interaction_type: 2
-  interaction_text: Manhole cover
+  interaction_text: Something is beneath this this manhole cover... if only I could
+    lift the lid?
   activator_key: {fileID: 198118394}
-  activator_targets: []
+  activator_targets:
+  - {fileID: 1626237670}
 --- !u!1 &1636058040
 GameObject:
   m_ObjectHideFlags: 0
@@ -29437,6 +29479,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1706231303 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7591011420420062839, guid: 93659a9354bf9af459e653a201c23997,
+    type: 3}
+  m_PrefabInstance: {fileID: 3053563136548392871}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1710457440
 GameObject:
   m_ObjectHideFlags: 0
@@ -38479,21 +38533,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3053563136548392871}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2069113568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069113567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb236c8c377eadf4b8b06a5581b65a52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  special_ability: 0
-  name: 4th Doctor
-  description: '"Would you like a Jelly Baby?"'
 --- !u!1 &2076121919
 GameObject:
   m_ObjectHideFlags: 0
@@ -39256,12 +39295,12 @@ PrefabInstance:
     - target: {fileID: 3053563138581849414, guid: 93659a9354bf9af459e653a201c23997,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -40.5
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 3053563138581849414, guid: 93659a9354bf9af459e653a201c23997,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -21.6
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 3053563138581849414, guid: 93659a9354bf9af459e653a201c23997,
         type: 3}
@@ -39308,25 +39347,72 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3053563138581849415, guid: 93659a9354bf9af459e653a201c23997,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3053563138581849415, guid: 93659a9354bf9af459e653a201c23997,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3053563138581849415, guid: 93659a9354bf9af459e653a201c23997,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3053563138581849464, guid: 93659a9354bf9af459e653a201c23997,
         type: 3}
       propertyPath: m_Name
       value: Doctor04
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831189900267916055, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6392270559532167742, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6392270559532167742, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591011420420062839, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_Text
+      value: '
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591011420420062839, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591011420420062839, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591011420420062839, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813783252092810757, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_DynamicPixelsPerUnit
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7903288775666180257, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_Name
+      value: InteractionText
+      objectReference: {fileID: 0}
+    - target: {fileID: 7903288775666180257, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8050489185366509767, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -6.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8050489185366509767, guid: 93659a9354bf9af459e653a201c23997,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 42.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93659a9354bf9af459e653a201c23997, type: 3}
