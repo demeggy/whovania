@@ -1,0 +1,86 @@
+Classes
+-------------------------------
+GameController
+
+UIManager
+
+	- holds UI elements
+	
+PlayerController
+
+	- controls doctor and companion figures
+	- Movement();
+        - UseAbility();
+        - Jump();
+        - PlatformDrop();
+        - Interact();
+
+Character
+
+	- controls character based info
+	- special abilities
+
+InventoryManager
+
+---------------------
+
+- Fade Transition when crossing camera regions
+- Parallax Scenery (if scenerey is flagged) only when the camera is moving
+
+---------------------
+
+Saving variables:
+
+Saves on entering the TARDIS (denotes in top left corner - either with icon or wording)
+
+save
+- points
+- lives
+- player current doctor
+- player_inventory
+- rescued companion list
+- active state of all interactive objects
+
+load
+
+- put player at tardis loading node
+- add rescued companions to list
+- put gameobj in inventory slots
+- setactive true or false of interactive objects
+
+Its only taken me 2 years, but I've finally started on my personal Doctor Who adventure game fan project (homage to the Dizzy Games of the 80s and 90s)
+
+---- Game Scene Heirarchy Design
+
+MainCamera
+
+Manager
+	GameController
+	UIManager
+	InventoryManager
+	SaveManager
+	RegionManager
+
+UI
+	InventoryUI
+	PauseUI
+
+Player
+	PlayerUI
+		PlayerText
+	Player_1
+	Player_2
+
+World_X
+	Grid
+		Tilemaps
+	Enemies
+		Enemy Objs
+	Interactive
+		Interactive Objs
+	Decor
+		Decorative Objs
+	Scenery
+		Background Objs
+	Pickups
+		Pickup Objs

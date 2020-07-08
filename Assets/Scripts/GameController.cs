@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     //Inventory vars
     public List<GameObject> inventory;
     private int itemIndex;
+    private bool switchingItems;
 
     //Character vars
     public int rescued_players;
@@ -41,12 +42,6 @@ public class GameController : MonoBehaviour
     //World vars
     public GameObject world_current;
     public GameObject world_tardis;
-    public GameObject world_zygor;
-    public GameObject world_skaro;
-    public GameObject world_earth;
-    public GameObject world_polymos;
-    public GameObject world_metebelis;
-    public GameObject world_gallifrey;
 
     //UI vars
     public GameObject interactionUI;
@@ -82,7 +77,6 @@ public class GameController : MonoBehaviour
         player_rb = player_current.gameObject.GetComponent<Rigidbody2D>();
         player_animator = player_current.gameObject.GetComponent<Animator>();
         mainCamera = Camera.main;
-
 
     }
 
@@ -321,8 +315,16 @@ public class GameController : MonoBehaviour
                     {
                         if(interactionTextRunning == false)
                         {
-                            //return text from item description and output
-                            StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().interaction_text);
+                            //if the item has not been activated before, run the pre-activation text
+                            if (!collider.gameObject.GetComponent<InteractiveObject>().isActivated)
+                            {
+                                StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().interaction_text);
+                            }
+                            else
+                            {
+                                StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().interaction_text_completed);
+                            }
+                            
                         }                        
                     }
                 }
@@ -526,51 +528,73 @@ public class GameController : MonoBehaviour
         //Navigate the Inventory Menu
         if (inventoryOpen)
         {
-            float menuSelect = Input.GetAxisRaw("Horizontal");
+            if(switchingItems == false)
+            {
+                float menuSelect = Input.GetAxisRaw("Horizontal");
 
-            //select right
-            if (menuSelect == 1 && itemIndex < 2)
-            {
-                itemIndex += 1;
-            }
-            else if (menuSelect == -1 && itemIndex > 0)
-            {
-                itemIndex -= 1;
-            }
-
-            //move the selector to the transform of the next invslot
-            inventorySelector.transform.position = inventorySlotUI[itemIndex].transform.position;
-            //return the name and description of index [i] from inventory
-            if (inventory.Count > 0)
-            {
-                if (itemIndex < inventory.Count)
+                if (menuSelect == 1 && itemIndex < 2)
                 {
-                    if (inventory[itemIndex] != null)
-                    {
-                        inventoryName.text = inventory[itemIndex].GetComponent<Pickup>().pickup_name;
-                        inventoryDesc.text = inventory[itemIndex].GetComponent<Pickup>().pickup_description;
-                    }
-                    else
-                    {
-                        inventoryName.text = "";
-                        inventoryDesc.text = "";
-                    }
+                    switchingItems = true;
+                    itemIndex += 1;
+                    StartCoroutine("SwitchItem");
+                }
+                else if (menuSelect == -1 && itemIndex > 0)
+                {
+                    switchingItems = true;
+                    itemIndex -= 1;
+                    StartCoroutine("SwitchItem");
                 }
 
+                //move the selector to the transform of the next invslot
+                inventorySelector.transform.position = inventorySlotUI[itemIndex].transform.position;
+                //return the name and description of index [i] from inventory
+                if (inventory.Count > 0)
+                {
+                    if (itemIndex < inventory.Count)
+                    {
+                        if (inventory[itemIndex] != null)
+                        {
+                            inventoryName.text = inventory[itemIndex].GetComponent<Pickup>().pickup_name;
+                            inventoryDesc.text = inventory[itemIndex].GetComponent<Pickup>().pickup_description;
+                        }
+                        else
+                        {
+                            inventoryName.text = "";
+                            inventoryDesc.text = "";
+                        }
+                    }
+                }
             }
 
             //Drop Selected Item
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 DropItem(itemIndex);
+               
             }
 
             //Use Selected Item
             if (Input.GetKeyDown(KeyCode.E))
             {
                 UseItem(itemIndex);
+
+                //Remove later - this will close the inventory window when item is used
+                inventoryOpen = !inventoryOpen;
+                inventoryUI.SetActive(!inventoryUI.activeSelf);
+
+                //Reset Inventory selection
+                itemIndex = 0;
+                inventorySelector.transform.position = inventorySlotUI[0].transform.position;
             }
         }
+    }
+
+    //Delay between selecting items within inventory screen
+    IEnumerator SwitchItem()
+    {
+
+        yield return new WaitForSeconds(0.5f);
+        switchingItems = false;
     }
 
     void UseItem(int itemIndex)

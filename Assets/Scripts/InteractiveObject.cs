@@ -7,9 +7,40 @@ public class InteractiveObject : MonoBehaviour
     public enum InteractType { toggle, activate, destroyer }
     public InteractType interaction_type;
 
+    private Material defaultMaterial;
+    public Material outlineSprite;
+    public float detection_range = 1f;
+
     public string interaction_text;
+    public string interaction_text_completed;
+    public bool isActivated;
     public GameObject activator_key;
     public List<GameObject> activator_targets;
+
+    private void Start()
+    {
+        defaultMaterial = GetComponent<SpriteRenderer>().material;
+    }
+
+    private void Update()
+    {
+        ToggleShader();
+    }
+
+    private void ToggleShader()
+    {
+        //Toggle Interaction Shader
+        float dist = Vector2.Distance(transform.position, GameController.Instance.player_current.transform.position);
+
+        if (dist < detection_range)
+        {
+            GetComponent<SpriteRenderer>().material = outlineSprite;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().material = defaultMaterial;
+        }
+    }
 
     public void Activate()
     {
@@ -41,10 +72,10 @@ public class InteractiveObject : MonoBehaviour
         //destroy activator_target on action if item used is the key
         if(itemUsed == activator_key)
         {
-            Activate(); 
+            Activate();
             //remove the item from inventory
+            isActivated = true;
             GameController.Instance.DestroyItem(itemIndex);
-            Debug.Log("correct key used");
         }
         else
         {
