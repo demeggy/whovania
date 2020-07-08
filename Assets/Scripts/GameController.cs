@@ -318,11 +318,11 @@ public class GameController : MonoBehaviour
                             //if the item has not been activated before, run the pre-activation text
                             if (!collider.gameObject.GetComponent<InteractiveObject>().isActivated)
                             {
-                                StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().interaction_text);
+                                StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().text_a);
                             }
                             else
                             {
-                                StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().interaction_text_completed);
+                                StartCoroutine("ShowInteractionText", collider.gameObject.GetComponent<InteractiveObject>().text_b);
                             }
                             
                         }                        

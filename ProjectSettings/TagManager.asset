@@ -11,6 +11,7 @@ TagManager:
   - playerB
   - pickup
   - interactive
+  - fogMask
   layers:
   - Default
   - TransparentFX

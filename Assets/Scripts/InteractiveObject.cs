@@ -11,10 +11,12 @@ public class InteractiveObject : MonoBehaviour
     public Material outlineSprite;
     public float detection_range = 1f;
 
-    public string interaction_text;
-    public string interaction_text_completed;
+    public string text_a;
+    public string text_b;
     public bool isActivated;
+    [Tooltip("Which object allows you to activate this interactor?")]
     public GameObject activator_key;
+    [Tooltip("Which objects are affected when this interactor is successfully activated?")]
     public List<GameObject> activator_targets;
 
     private void Start()

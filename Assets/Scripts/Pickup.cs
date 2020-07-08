@@ -11,7 +11,9 @@ public class Pickup : MonoBehaviour
 
     private void Update()
     {
+        //rotate pickup in the y-axis
 
+        transform.Rotate(0, 1, 0);
     }
 
 }
