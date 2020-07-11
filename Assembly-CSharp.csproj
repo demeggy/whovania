@@ -67,10 +67,11 @@
     <Compile Include="Assets\Camera Regions\Scripts\Region.cs" />
     <Compile Include="Assets\Camera Regions\Scripts\RegionCamera.cs" />
     <Compile Include="Assets\Camera Regions\Scripts\RegionHandler.cs" />
-    <Compile Include="Assets\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Boss_Earth.cs" />
+    <Compile Include="Assets\Scripts\CharacterInfo.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\InteractiveObject.cs" />
+    <Compile Include="Assets\Scripts\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\MonsterController.cs" />
     <Compile Include="Assets\Scripts\Pickup.cs" />
     <Compile Include="Assets\Scripts\PixellateTransition.cs" />
@@ -80,7 +81,8 @@
     <Compile Include="Assets\Scripts\Save.cs" />
     <Compile Include="Assets\Scripts\Teleporter.cs" />
     <Compile Include="Assets\Scripts\UIController.cs" />
-    <Compile Include="Assets\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UIManager.cs" />
+    <Compile Include="Assets\Scripts\WorldManager.cs" />
     <None Include="Assets\Shaders\Pixelate.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

@@ -66,6 +66,8 @@ public class InteractiveObject : MonoBehaviour
                 default:
                     break;
             }
+
+            //if it's the TARDIS door, teleport them into the TARDIS
         }
     }
 

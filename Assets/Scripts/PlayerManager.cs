@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
             Movement();
             //UseAbility();
             Jump();
-            //PlatformDrop();
+            PlatformDrop();
             Interact();
 
             if (Input.GetKeyDown(KeyCode.Q))
@@ -120,6 +120,30 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    void PlatformDrop()
+    {
+        LayerMask Platform = LayerMask.GetMask("Platform");
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            RaycastHit2D platformDetected = Physics2D.Raycast(transform.position, Vector2.down, 0.75f, Platform);
+            Debug.DrawRay(transform.position, Vector2.down * 0.75f, Color.blue, 3);
+
+            if (platformDetected)
+            {
+                StartCoroutine("DropFromPlatform");
+            }
+
+        }
+    }
+
+    IEnumerator DropFromPlatform()
+    {
+        GetComponent<Collider2D>().isTrigger = true;
+        yield return new WaitForSeconds(0.35f);
+        GetComponent<Collider2D>().isTrigger = false;
+    }
+
     void Interact()
     {
         if (Input.GetKeyDown(KeyCode.W))
@@ -131,17 +155,31 @@ public class PlayerManager : MonoBehaviour
             {
                 foreach (Collider2D collider in colliders)
                 {
+                    GameObject obj = collider.gameObject;
+
                     //Pickup or activate a companion
                     if (collider.gameObject.tag == "inactivePlayer")
                     {
                         //if there is no companion, add the target to the playerB slot, and position/rotate the object at the companion Node behind the Doctor
                         if (!playerB)
                         {
-                            playerB = collider.gameObject;
+
+                            //add the companion to the companion slots if they've never been picked up before
+                            if (GameController.Instance.companionSlots.IndexOf(obj) < 0)
+                            {
+                                GameController.Instance.companionSlots.Add(obj);
+                            }
+
+                            UIManager.Instance.StartInteraction(obj.GetComponent<CharacterInfo>().charInfo + "\n" + obj.GetComponent<CharacterInfo>().charName + " has joined!");
+                            playerB = obj;
                             playerB.transform.parent = transform;
                             playerB.transform.position = companionNode.transform.position;
                             playerB.transform.rotation = transform.rotation;
                             playerB.tag = "activePlayer";
+                        }
+                        else
+                        {
+                            //send this object to the Tardis
                         }
                     }
 
@@ -162,7 +200,7 @@ public class PlayerManager : MonoBehaviour
                     //Examine interactive items
                     if (collider.gameObject.tag == "interactive")
                     {
-                        if (GameController.Instance.interactionTextRunning == false)
+                        if (UIManager.Instance.interactionTextRunning == false)
                         {
                             //if the item has not been activated before, run the pre-activation text
                             if (!collider.gameObject.GetComponent<InteractiveObject>().isActivated)
@@ -293,10 +331,29 @@ public class PlayerManager : MonoBehaviour
         //move player to the related node position
         transform.position = teleport_node.transform.position;
 
-        //Disable current world layer
-        //world_current.SetActive(false);
-        //Activate tardis world layer
-        //world_tardis.SetActive(true);
+        //if companion is present
+        //move playerB gameObject to Tardis Interior
+        //set parent of playerB to null
+        //set playerB to null
+
+        if (playerB)
+        {
+            RemoveCompanion();
+        }
+
+    }
+
+    void RemoveCompanion()
+    {
+        //Get the companions slots node position from the SlotPos list, and send them to that Vector
+        int i = GameController.Instance.companionSlots.IndexOf(playerB);
+        Debug.Log(i);
+        Vector2 sendToPos = GameController.Instance.companionSlotPos[i].transform.position;
+        playerB.transform.position = sendToPos;
+
+        playerB.tag = "inactivePlayer";
+        playerB.transform.parent = null;
+        playerB = null;
     }
 
     //Toggle the TorchMask if it enters a fogMask area of a map

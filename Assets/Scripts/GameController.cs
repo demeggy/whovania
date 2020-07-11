@@ -55,7 +55,10 @@ public class GameController : MonoBehaviour
     public Image inventorySelector;
     public List<Image> inventorySlotUI;
     public GameObject inventoryUI;
-    
+
+    //companion stuff
+    public List<GameObject> companionSlots;
+    public List<GameObject> companionSlotPos;
 
     public static GameController Instance { get; private set; }
 
