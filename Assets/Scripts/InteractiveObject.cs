@@ -32,7 +32,7 @@ public class InteractiveObject : MonoBehaviour
     private void ToggleShader()
     {
         //Toggle Interaction Shader
-        float dist = Vector2.Distance(transform.position, GameController.Instance.player_current.transform.position);
+        float dist = Vector2.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position);
 
         if (dist < detection_range)
         {
@@ -77,7 +77,7 @@ public class InteractiveObject : MonoBehaviour
             Activate();
             //remove the item from inventory
             isActivated = true;
-            GameController.Instance.DestroyItem(itemIndex);
+            InventoryManager.Instance.DestroyItem(itemIndex);
         }
         else
         {

@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
     public string description;
     public GameObject torchMask;
 
+    public float speed = 3f;
+    public float jump = 3f;
+    private float jumpCounter;
+    private bool isGrounded;
+
+    //------------------------------
+
     void UseSpecial()
     {
 

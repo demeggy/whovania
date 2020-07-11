@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
 {
 
     //Game vars
-    private bool inventoryOpen = false;
+    public bool inventoryOpen = false;
 
     //Player vars
     public GameObject player_current;
@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour
     //UI vars
     public GameObject interactionUI;
     public Text interactionText;
-    private bool interactionTextRunning;
+    public bool interactionTextRunning;
     public float dialogueDelay;
     public string fullText;
     private string currentText = "";
@@ -125,6 +125,7 @@ public class GameController : MonoBehaviour
         //Player Inputs only function if the game is not paused
         if (!inventoryOpen)
         {
+            //debug - disabled whilst working on playercontroller
             Movement();
             UseAbility();
             Jump();
@@ -132,7 +133,7 @@ public class GameController : MonoBehaviour
             Interact();
         }
 
-        OpenInventory();
+        //OpenInventory();
 
         //Debug Commands
         DebugShortcuts();
@@ -140,7 +141,7 @@ public class GameController : MonoBehaviour
         //Manually switch Players if there is a companion present and they are not in the Tardis
         if (Input.GetKeyDown(KeyCode.Q) && playersRemaining > 1 && world_current != world_tardis)
         {
-            SwitchPlayer();
+            //SwitchPlayer();
         }
 
         //Camera Movement
@@ -175,19 +176,42 @@ public class GameController : MonoBehaviour
         //Flip Sprite
         if (dirX < 0)
         {
-            player_current.GetComponent<SpriteRenderer>().flipX = true;
+            //player_current.GetComponent<SpriteRenderer>().flipX = true;
+            player_current.transform.rotation = Quaternion.Euler(0, 180, 0);
             player_animator.SetBool("isRunning", true);
+
+            //if player b is present, animate them
+            if (player_b)
+            {
+                player_b.GetComponent<Animator>().SetBool("isRunning", true);
+            }
+
             StopInteraction();
         }
         else if (dirX > 0)
         {
-            player_current.GetComponent<SpriteRenderer>().flipX = false;
+            //player_current.GetComponent<SpriteRenderer>().flipX = false;
+            player_current.transform.rotation = Quaternion.Euler(0, 0, 0);
             player_animator.SetBool("isRunning", true);
+
+            //if player b is present, animate them
+            if (player_b)
+            {
+                player_b.GetComponent<Animator>().SetBool("isRunning", true);
+            }
+
             StopInteraction();
         }
         else
         {
             player_animator.SetBool("isRunning", false);
+
+            //if player b is present, animate them
+            if (player_b)
+            {
+                player_b.GetComponent<Animator>().SetBool("isRunning", false);
+            }
+
         }
     }
 
@@ -282,6 +306,7 @@ public class GameController : MonoBehaviour
                             }
                             rescued_players += 1;
                             playersRemaining += 1;
+                            //companion moves to companio node
                             Debug.Log(collider.gameObject.name + " has joined (" + playersRemaining + " players");
                         }
                         else
@@ -297,12 +322,12 @@ public class GameController : MonoBehaviour
                     }
 
                     //Enter or exit the Tardis
-                    if (collider.gameObject.tag == "door" && player_current == player_a)
-                    {
-                        //player_current.transform.position = collider.gameObject.GetComponent<Teleporter>().Target.transform.position;
-                        Teleport(collider.gameObject.GetComponent<Teleporter>().Target, collider.gameObject.GetComponent<Teleporter>().door_direction.ToString());
+                    //if (collider.gameObject.tag == "door" && player_current == player_a)
+                    //{
+                    //    //player_current.transform.position = collider.gameObject.GetComponent<Teleporter>().Target.transform.position;
+                    //    //Teleport(collider.gameObject.GetComponent<Teleporter>().Target, collider.gameObject.GetComponent<Teleporter>().door_direction.ToString());
 
-                    }
+                    //}
 
                     //Pickup items
                     if (collider.gameObject.tag == "pickup")
@@ -333,48 +358,48 @@ public class GameController : MonoBehaviour
 
     }
 
-    void SwitchPlayer()
-    {
-        //Remove activePlayer tag from current player
-        player_current.tag = "inactivePlayer";
+    //void SwitchPlayer()
+    //{
+    //    //Remove activePlayer tag from current player
+    //    player_current.tag = "inactivePlayer";
 
-        //Toggle the current controlling player around, ensuring the colliders are changed between trigger and solid
+    //    //Toggle the current controlling player around, ensuring the colliders are changed between trigger and solid
 
-        //Switch to Player B (Companion)
-        if (player_current == player_a)
-        {
-            player_current = player_b;
-            player_a.GetComponent<Rigidbody2D>().gravityScale = 0;
-            player_b.GetComponent<Rigidbody2D>().gravityScale = 3;
-            player_a.GetComponent<BoxCollider2D>().isTrigger = true;
-            player_b.GetComponent<BoxCollider2D>().isTrigger = false;
-        }
+    //    //Switch to Player B (Companion)
+    //    if (player_current == player_a)
+    //    {
+    //        player_current = player_b;
+    //        player_a.GetComponent<Rigidbody2D>().gravityScale = 0;
+    //        player_b.GetComponent<Rigidbody2D>().gravityScale = 3;
+    //        player_a.GetComponent<BoxCollider2D>().isTrigger = true;
+    //        player_b.GetComponent<BoxCollider2D>().isTrigger = false;
+    //    }
 
-        //Switch to Player A (Doctor)
-        else
-        {
-            player_current = player_a;
-            player_a.GetComponent<Rigidbody2D>().gravityScale = 3;
-            player_b.GetComponent<Rigidbody2D>().gravityScale = 0;
-            player_a.GetComponent<BoxCollider2D>().isTrigger = false;
-            player_b.GetComponent<BoxCollider2D>().isTrigger = true;
-        }
+    //    //Switch to Player A (Doctor)
+    //    else
+    //    {
+    //        player_current = player_a;
+    //        player_a.GetComponent<Rigidbody2D>().gravityScale = 3;
+    //        player_b.GetComponent<Rigidbody2D>().gravityScale = 0;
+    //        player_a.GetComponent<BoxCollider2D>().isTrigger = false;
+    //        player_b.GetComponent<BoxCollider2D>().isTrigger = true;
+    //    }
 
-        //Move the camera to the other character
-        isCameraMoving = true;
+    //    //Move the camera to the other character
+    //    isCameraMoving = true;
 
-        //Force the inactive player to idle anim
-        player_animator.SetBool("isRunning", false);
-        player_animator.SetBool("isSpecial", false);
+    //    //Force the inactive player to idle anim
+    //    player_animator.SetBool("isRunning", false);
+    //    player_animator.SetBool("isSpecial", false);
 
-        //Update the player component references (potentially costly to do this constantly during runtime)
-        player_rb = player_current.gameObject.GetComponent<Rigidbody2D>();
-        player_animator = player_current.gameObject.GetComponent<Animator>();
+    //    //Update the player component references (potentially costly to do this constantly during runtime)
+    //    player_rb = player_current.gameObject.GetComponent<Rigidbody2D>();
+    //    player_animator = player_current.gameObject.GetComponent<Animator>();
 
-        //set the new player as activePlayer tag
-        player_current.tag = "activePlayer";
+    //    //set the new player as activePlayer tag
+    //    player_current.tag = "activePlayer";
 
-    }
+    //}
 
     public void DamagePlayer()
     {
@@ -390,7 +415,7 @@ public class GameController : MonoBehaviour
         //If there are 2 active players
         if (playersRemaining > 1)
         {
-            SwitchPlayer();
+            //SwitchPlayer();
             playersRemaining -= 1;
         }
         else
@@ -398,45 +423,45 @@ public class GameController : MonoBehaviour
             //Regenerate Doctor
             if (player_current != player_a)
             {
-                SwitchPlayer();
+                //SwitchPlayer();
             }
             livesRemaining -= 1;
         }
     }
 
-    void Teleport(GameObject teleport_node, string direction)
-    {
-        //if moving into the Tardis
-        if (direction == "In")
-        {
-            //If player_b is present, move player_b to their relevant companion node and clear the active companion slot (player_b)
-            if (player_b)
-            {
-                player_b.transform.position = new Vector2(rescue_node.transform.position.x + rescued_players, rescue_node.transform.position.y);
-                rescued_players += 1;
-                player_b = null;
-            }
+    //public void Teleport(GameObject teleport_node, string direction)
+    //{
+    //    //if moving into the Tardis
+    //    if (direction == "In")
+    //    {
+    //        //If player_b is present, move player_b to their relevant companion node and clear the active companion slot (player_b)
+    //        if (player_b)
+    //        {
+    //            player_b.transform.position = new Vector2(rescue_node.transform.position.x + rescued_players, rescue_node.transform.position.y);
+    //            rescued_players += 1;
+    //            player_b = null;
+    //        }
 
-            //Set playersRemaining to 1
-            playersRemaining = 1;
-        }
-        else
-        {
-            //move active companions to tardis exterior node
-            if (player_b)
-            {
-                player_b.transform.position = teleport_node.transform.position;
-            }
-        }
+    //        //Set playersRemaining to 1
+    //        playersRemaining = 1;
+    //    }
+    //    else
+    //    {
+    //        //move active companions to tardis exterior node
+    //        if (player_b)
+    //        {
+    //            player_b.transform.position = teleport_node.transform.position;
+    //        }
+    //    }
 
-        //move player to the related node position
-        player_current.transform.position = teleport_node.transform.position;
+    //    //move player to the related node position
+    //    player_current.transform.position = teleport_node.transform.position;
 
-        //Disable current world layer
-        //world_current.SetActive(false);
-        //Activate tardis world layer
-        //world_tardis.SetActive(true);
-    }
+    //    //Disable current world layer
+    //    //world_current.SetActive(false);
+    //    //Activate tardis world layer
+    //    //world_tardis.SetActive(true);
+    //}
 
     void Rescue()
     {
@@ -507,142 +532,142 @@ public class GameController : MonoBehaviour
 
     //Inventory ----------------------------------------------------------------------------------------------------------------------
 
-    void OpenInventory()
-    {
-        //Toggle inventory menu on and off
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            inventoryOpen = !inventoryOpen;
-            inventoryUI.SetActive(!inventoryUI.activeSelf);
+    //void OpenInventory()
+    //{
+    //    //Toggle inventory menu on and off
+    //    if (Input.GetKeyDown(KeyCode.Return))
+    //    {
+    //        inventoryOpen = !inventoryOpen;
+    //        inventoryUI.SetActive(!inventoryUI.activeSelf);
 
-            //Reset Inventory selection
-            itemIndex = 0;
-            inventorySelector.transform.position = inventorySlotUI[0].transform.position;
-        }
+    //        //Reset Inventory selection
+    //        itemIndex = 0;
+    //        inventorySelector.transform.position = inventorySlotUI[0].transform.position;
+    //    }
 
-        NavigateInventory();
-    }
+    //    NavigateInventory();
+    //}
 
-    void NavigateInventory()
-    {
-        //Navigate the Inventory Menu
-        if (inventoryOpen)
-        {
-            if(switchingItems == false)
-            {
-                float menuSelect = Input.GetAxisRaw("Horizontal");
+    //void NavigateInventory()
+    //{
+    //    //Navigate the Inventory Menu
+    //    if (inventoryOpen)
+    //    {
+    //        if(switchingItems == false)
+    //        {
+    //            float menuSelect = Input.GetAxisRaw("Horizontal");
 
-                if (menuSelect == 1 && itemIndex < 2)
-                {
-                    switchingItems = true;
-                    itemIndex += 1;
-                    StartCoroutine("SwitchItem");
-                }
-                else if (menuSelect == -1 && itemIndex > 0)
-                {
-                    switchingItems = true;
-                    itemIndex -= 1;
-                    StartCoroutine("SwitchItem");
-                }
+    //            if (menuSelect == 1 && itemIndex < 2)
+    //            {
+    //                switchingItems = true;
+    //                itemIndex += 1;
+    //                StartCoroutine("SwitchItem");
+    //            }
+    //            else if (menuSelect == -1 && itemIndex > 0)
+    //            {
+    //                switchingItems = true;
+    //                itemIndex -= 1;
+    //                StartCoroutine("SwitchItem");
+    //            }
 
-                //move the selector to the transform of the next invslot
-                inventorySelector.transform.position = inventorySlotUI[itemIndex].transform.position;
-                //return the name and description of index [i] from inventory
-                if (inventory.Count > 0)
-                {
-                    if (itemIndex < inventory.Count)
-                    {
-                        if (inventory[itemIndex] != null)
-                        {
-                            inventoryName.text = inventory[itemIndex].GetComponent<Pickup>().pickup_name;
-                            inventoryDesc.text = inventory[itemIndex].GetComponent<Pickup>().pickup_description;
-                        }
-                        else
-                        {
-                            inventoryName.text = "";
-                            inventoryDesc.text = "";
-                        }
-                    }
-                }
-            }
+    //            //move the selector to the transform of the next invslot
+    //            inventorySelector.transform.position = inventorySlotUI[itemIndex].transform.position;
+    //            //return the name and description of index [i] from inventory
+    //            if (inventory.Count > 0)
+    //            {
+    //                if (itemIndex < inventory.Count)
+    //                {
+    //                    if (inventory[itemIndex] != null)
+    //                    {
+    //                        inventoryName.text = inventory[itemIndex].GetComponent<Pickup>().pickup_name;
+    //                        inventoryDesc.text = inventory[itemIndex].GetComponent<Pickup>().pickup_description;
+    //                    }
+    //                    else
+    //                    {
+    //                        inventoryName.text = "";
+    //                        inventoryDesc.text = "";
+    //                    }
+    //                }
+    //            }
+    //        }
 
-            //Drop Selected Item
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                DropItem(itemIndex);
+    //        //Drop Selected Item
+    //        if (Input.GetKeyDown(KeyCode.Q))
+    //        {
+    //            DropItem(itemIndex);
                
-            }
+    //        }
 
-            //Use Selected Item
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                UseItem(itemIndex);
+    //        //Use Selected Item
+    //        if (Input.GetKeyDown(KeyCode.E))
+    //        {
+    //            UseItem(itemIndex);
 
-                //Remove later - this will close the inventory window when item is used
-                inventoryOpen = !inventoryOpen;
-                inventoryUI.SetActive(!inventoryUI.activeSelf);
+    //            //Remove later - this will close the inventory window when item is used
+    //            inventoryOpen = !inventoryOpen;
+    //            inventoryUI.SetActive(!inventoryUI.activeSelf);
 
-                //Reset Inventory selection
-                itemIndex = 0;
-                inventorySelector.transform.position = inventorySlotUI[0].transform.position;
-            }
-        }
-    }
+    //            //Reset Inventory selection
+    //            itemIndex = 0;
+    //            inventorySelector.transform.position = inventorySlotUI[0].transform.position;
+    //        }
+    //    }
+    //}
 
-    //Delay between selecting items within inventory screen
-    IEnumerator SwitchItem()
-    {
+    ////Delay between selecting items within inventory screen
+    //IEnumerator SwitchItem()
+    //{
 
-        yield return new WaitForSeconds(0.5f);
-        switchingItems = false;
-    }
+    //    yield return new WaitForSeconds(0.5f);
+    //    switchingItems = false;
+    //}
 
-    void UseItem(int itemIndex)
-    {
-        //unpause
-        //hit for interactive objects
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(player_current.transform.position, 1f);
+    //void UseItem(int itemIndex)
+    //{
 
-        if (colliders.Length > 0)
-        {
-            foreach (Collider2D collider in colliders)
-            {
-                GameObject obj = collider.gameObject;
-                Debug.Log(obj.name);
+    //    //hit for interactive objects
+    //    Collider2D[] colliders = Physics2D.OverlapCircleAll(GameObject.FindGameObjectWithTag("Player").transform.position, 1f);
 
-                //call UseItemOn on all interactive objects returned
-                if (obj.tag == "interactive")
-                {
-                    //pass the current selected item into the target objects script
-                    obj.GetComponent<InteractiveObject>().UseItemOn(inventory[itemIndex], itemIndex);
-                }
-            }
-        }
-    }
+    //    if (colliders.Length > 0)
+    //    {
+    //        foreach (Collider2D collider in colliders)
+    //        {
+    //            GameObject obj = collider.gameObject;
+    //            Debug.Log(obj.name);
 
-    public void DropItem(int itemIndex)
-    {
-        //move the item to position
-        if (inventory[itemIndex] != null)
-        {
-            inventory[itemIndex].transform.position = player_current.transform.position;
-            inventory[itemIndex].SetActive(true);
-            //remove the item from the list
-            inventory[itemIndex] = null;
-            //remove from UI
-            inventorySlotUI[itemIndex].color = new Color(1, 1, 1, 0);
-            inventorySlotUI[itemIndex].sprite = null;
-        }
-    }
+    //            //call UseItemOn on all interactive objects returned
+    //            if (obj.tag == "interactive")
+    //            {
+    //                //pass the current selected item into the target objects script
+    //                obj.GetComponent<InteractiveObject>().UseItemOn(inventory[itemIndex], itemIndex);
+    //            }
+    //        }
+    //    }
+    //}
 
-    public void DestroyItem(int itemIndex)
-    {
-        //remove the item from the list
-        inventory[itemIndex] = null;
-        //remove from UI
-        inventorySlotUI[itemIndex].color = new Color(1, 1, 1, 0);
-        inventorySlotUI[itemIndex].sprite = null;
-    }
+    //public void DropItem(int itemIndex)
+    //{
+    //    //move the item to position
+    //    if (inventory[itemIndex] != null)
+    //    {
+    //        inventory[itemIndex].transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+    //        inventory[itemIndex].SetActive(true);
+    //        //remove the item from the list
+    //        inventory[itemIndex] = null;
+    //        //remove from UI
+    //        inventorySlotUI[itemIndex].color = new Color(1, 1, 1, 0);
+    //        inventorySlotUI[itemIndex].sprite = null;
+    //    }
+    //}
+
+    //public void DestroyItem(int itemIndex)
+    //{
+    //    //remove the item from the list
+    //    inventory[itemIndex] = null;
+    //    //remove from UI
+    //    inventorySlotUI[itemIndex].color = new Color(1, 1, 1, 0);
+    //    inventorySlotUI[itemIndex].sprite = null;
+    //}
 
     // Debug Shortcut keys only ------------------------------------------
     void DebugShortcuts()
